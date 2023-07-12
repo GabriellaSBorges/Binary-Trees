@@ -42,7 +42,7 @@ BinaryTree *binary_tree_construct(
     CmpFn cmp_fn, KeyDestroyFn key_destroy_fn,
     ValDestroyFn val_destroy_fn);
 void binary_tree_add(BinaryTree *bt, void *key, void *value);
-Node *add_recursive(Node *node, data_type key, data_type val);
+Node *add_recursive(BinaryTree *bt, Node *node, data_type key, data_type val);
 
 int binary_tree_empty(BinaryTree *bt);
 void binary_tree_remove(BinaryTree *bt, void *key);
@@ -52,7 +52,7 @@ KeyValPair *binary_tree_pop_min(BinaryTree *bt);
 KeyValPair *binary_tree_pop_max(BinaryTree *bt);
 
 void *binary_tree_get(BinaryTree *bt, void *key);
-Node *get_recursive(Node *node, data_type key);
+Node *get_recursive(CmpFn cmp_fn, Node *node, data_type key);
 
 void binary_tree_destroy(BinaryTree *bt);
 

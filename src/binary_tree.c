@@ -65,21 +65,26 @@ BinaryTree *binary_tree_construct(CmpFn cmp_fn, KeyDestroyFn key_destroy_fn, Val
 }
 
 void binary_tree_add(BinaryTree *bt, void *key, void *value){
-    bt->root = add_recursive(bt->root, key, value);
-    // free(value);
-    // free(key);
+    bt->root = add_recursive(bt, bt->root, key, value);
 }
 
-Node *add_recursive(Node *node, data_type key, data_type val){
+Node *add_recursive(BinaryTree *bt, Node *node, data_type key, data_type val){
 
     if( !node )
         return node_construct(key, val, NULL, NULL);
     
-    if( strcmp(key, node->key) < 0 )
-        node->left = add_recursive(node->left, key, val);
-    else
-        node->right = add_recursive(node->right, key, val);
+    int cmp = bt->cmp_fn(key, node->key);
 
+    if( cmp < 0 )
+        node->left = add_recursive(bt, node->left, key, val);
+    else if( cmp > 0 )
+        node->right = add_recursive(bt, node->right, key, val);
+    else{
+        bt->key_destroy_fn(key);
+        bt->val_destroy_fn(node->value);
+        node->value = val;
+    }
+        
     return node;
 }
 
@@ -93,7 +98,7 @@ void binary_tree_remove(BinaryTree *bt, void *key);
 
 
 void *binary_tree_get(BinaryTree *bt, void *key){
-    Node *node = get_recursive(bt->root, key);
+    Node *node = get_recursive(bt->cmp_fn, bt->root, key);
 
     if( !node )
         return NULL;
@@ -101,19 +106,19 @@ void *binary_tree_get(BinaryTree *bt, void *key){
     return node->value;
 }
 
-Node *get_recursive(Node *node, data_type key){
+Node *get_recursive(CmpFn cmp_fn, Node *node, data_type key){
 
     if( !node )
         return NULL;
 
-    int cmp = strcmp(key, node->key);
+    int cmp = cmp_fn(key, node->key);
 
     if( !cmp )
         return node;
     else if( cmp < 0 )
-        node = get_recursive(node->left, key);
+        node = get_recursive(cmp_fn, node->left, key);
     else if( cmp > 0 )
-        node = get_recursive(node->right, key);
+        node = get_recursive(cmp_fn, node->right, key);
     
 
     return node;
