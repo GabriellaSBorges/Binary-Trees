@@ -2,6 +2,10 @@
 #ifndef _DATA_STRUCTURES_VECTOR_H_
 #define _DATA_STRUCTURES_VECTOR_H_
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 typedef void *data_type;
 typedef unsigned char bool;
 
