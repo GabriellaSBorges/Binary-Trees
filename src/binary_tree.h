@@ -35,17 +35,19 @@ typedef struct{
 KeyValPair *key_val_pair_construct(void *key, void *val);
 void key_val_pair_destroy(KeyValPair *kvp);
 
-Node *node_construct(void *key, void *value, Node *left, Node *right);
+Node *node_construct(void *key, void *value, Node *left, Node *right, Node *parent);
 void node_destroy(Node *node, KeyDestroyFn key_destroy_fn, ValDestroyFn val_destroy_fn);
 
 BinaryTree *binary_tree_construct(
     CmpFn cmp_fn, KeyDestroyFn key_destroy_fn,
     ValDestroyFn val_destroy_fn);
 void binary_tree_add(BinaryTree *bt, void *key, void *value);
-Node *add_recursive(BinaryTree *bt, Node *node, data_type key, data_type val);
+Node *add_recursive(BinaryTree *bt, Node *node, Node *parent, data_type key, data_type val);
 
 int binary_tree_empty(BinaryTree *bt);
 void binary_tree_remove(BinaryTree *bt, void *key);
+void transplant(BinaryTree *bt, Node *old, Node *new);
+
 KeyValPair *binary_tree_min(BinaryTree *bt);
 KeyValPair *binary_tree_max(BinaryTree *bt);
 KeyValPair *binary_tree_pop_min(BinaryTree *bt);
