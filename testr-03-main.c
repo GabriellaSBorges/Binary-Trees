@@ -74,6 +74,7 @@ int main()
         {
             scanf("%s", cpf);
             binary_tree_remove(bt, cpf);
+
         }
         else
         {

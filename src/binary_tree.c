@@ -43,14 +43,16 @@ Node *node_construct(void *key, void *value, Node *left, Node *right, Node *pare
 
 void node_destroy(Node *node, KeyDestroyFn key_destroy_fn, ValDestroyFn val_destroy_fn){
 
-    key_destroy_fn(node->key);
-    val_destroy_fn(node->value);
+    if( node ){
+        key_destroy_fn(node->key);
+        val_destroy_fn(node->value);
+        
+        if( node->left )
+            node_destroy(node->left, key_destroy_fn, val_destroy_fn);
+        if( node->right )
+            node_destroy(node->right, key_destroy_fn, val_destroy_fn);
+    }
     
-    if( node->left )
-        node_destroy(node->left, key_destroy_fn, val_destroy_fn);
-    if( node->right )
-        node_destroy(node->right, key_destroy_fn, val_destroy_fn);
-    // if( node->parent )
 
    
     free(node);
@@ -98,11 +100,45 @@ int binary_tree_empty(BinaryTree *bt){
 }
 
 void binary_tree_remove(BinaryTree *bt, void *key){
+    Node *node = get_recursive(bt->cmp_fn, bt->root, key);
 
+    if( !node->left )
+        transplant(bt, node, node->right);
+
+    else if( !node->right )
+        transplant(bt, node, node->left);
+
+    else{
+        Node *new = node->right;
+
+        if( new->parent == node ){
+            transplant(bt, node, new);
+            new->left = node->left;
+            new->left->parent = new;
+
+        } else {
+            transplant(bt, new, new->right);
+            new->right = node->right;
+            new->right->parent = new;
+        }
+    }
+
+    bt->key_destroy_fn(node->key);
+    bt->val_destroy_fn(node->value);
+    free(node);
 }
 
 void transplant(BinaryTree *bt, Node *old, Node *new){
 
+    if( !old->parent )
+        bt->root = new;
+    else if( old == old->parent->left )
+        old->parent->left = new;
+    else 
+        old->parent->right = new;
+    
+    if( new )
+        new->parent = old->parent;
 }
 
 void *binary_tree_get(BinaryTree *bt, void *key){
