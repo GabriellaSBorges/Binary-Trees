@@ -75,10 +75,10 @@ void binary_tree_add(BinaryTree *bt, void *key, void *value){
 }
 
 Node *add_recursive(BinaryTree *bt, Node *node, Node *parent, data_type key, data_type val){
-
+    
     if( !node )
         return node_construct(key, val, NULL, NULL, parent);
-    
+
     parent = node;
     int cmp = bt->cmp_fn(key, node->key);
 
@@ -104,7 +104,6 @@ void binary_tree_remove(BinaryTree *bt, void *key){
 
     if( !node->left )
         transplant(bt, node, node->right);
-
     else if( !node->right )
         transplant(bt, node, node->left);
 
@@ -139,6 +138,32 @@ void transplant(BinaryTree *bt, Node *old, Node *new){
     
     if( new )
         new->parent = old->parent;
+}
+
+KeyValPair *binary_tree_min(BinaryTree *bt){
+    Node *node = bt->root;
+
+    while( node->left )
+        node = node->left;
+    
+    KeyValPair *pair = (KeyValPair*) malloc( sizeof(KeyValPair) );
+    pair->key = node->key;
+    pair->value = node->value;
+
+    return pair;
+}
+
+KeyValPair *binary_tree_max(BinaryTree *bt){
+    Node *node = bt->root;
+
+    while( node->right )
+        node = node->right;
+    
+    KeyValPair *pair = (KeyValPair*) malloc( sizeof(KeyValPair) );
+    pair->key = node->key;
+    pair->value = node->value;
+
+    return pair;
 }
 
 void *binary_tree_get(BinaryTree *bt, void *key){
