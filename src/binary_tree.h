@@ -33,7 +33,7 @@ typedef struct{
 // } BinaryTree;
 
 KeyValPair *key_val_pair_construct(void *key, void *val);
-void key_val_pair_destroy(KeyValPair *kvp, KeyDestroyFn key_destroy_fn, ValDestroyFn val_destroy_fn);
+void key_val_pair_destroy(KeyValPair *kvp);
 // void *pair_return_key(KeyValPair *kvp);
 // void *pair_return_val(KeyValPair *kvp);
 
@@ -48,6 +48,7 @@ Node *add_recursive(BinaryTree *bt, Node *node, Node *parent, data_type key, dat
 
 int binary_tree_empty(BinaryTree *bt);
 void binary_tree_remove(BinaryTree *bt, void *key);
+void change_nodes_from_tree(BinaryTree *bt, Node *old);
 void transplant(BinaryTree *bt, Node *old, Node *new);
 
 KeyValPair *binary_tree_min(BinaryTree *bt);

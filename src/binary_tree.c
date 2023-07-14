@@ -24,7 +24,7 @@ KeyValPair *key_val_pair_construct(void *key, void *val){
     return kvp;
 }
 
-void key_val_pair_destroy(KeyValPair *kvp, KeyDestroyFn key_destroy_fn, ValDestroyFn val_destroy_fn){
+void key_val_pair_destroy(KeyValPair *kvp){
     free(kvp);
 }
 
@@ -100,6 +100,15 @@ int binary_tree_empty(BinaryTree *bt){
 void binary_tree_remove(BinaryTree *bt, void *key){
     Node *node = get_recursive(bt->cmp_fn, bt->root, key);
 
+    change_nodes_from_tree(bt, node);
+
+    bt->key_destroy_fn(node->key);
+    bt->val_destroy_fn(node->value);
+    free(node);
+}
+
+void change_nodes_from_tree(BinaryTree *bt, Node *node){
+
     if( !node->left )
         transplant(bt, node, node->right);
     else if( !node->right )
@@ -119,10 +128,6 @@ void binary_tree_remove(BinaryTree *bt, void *key){
             new->right->parent = new;
         }
     }
-
-    bt->key_destroy_fn(node->key);
-    bt->val_destroy_fn(node->value);
-    free(node);
 }
 
 void transplant(BinaryTree *bt, Node *old, Node *new){
@@ -154,6 +159,32 @@ KeyValPair *binary_tree_max(BinaryTree *bt){
         node = node->right;
     
     return key_val_pair_construct( node->key, node->value );
+}
+
+KeyValPair *binary_tree_pop_min(BinaryTree *bt){
+    Node *node = bt->root;
+
+    while( node->left )
+        node = node->left;
+    KeyValPair *pair =  key_val_pair_construct( node->key, node->value );
+
+    change_nodes_from_tree(bt, node);
+    free(node);
+
+    return pair;
+}
+
+KeyValPair *binary_tree_pop_max(BinaryTree *bt){
+   Node *node = bt->root;
+
+    while( node->right )
+        node = node->right;
+    KeyValPair *pair =  key_val_pair_construct( node->key, node->value );
+
+    change_nodes_from_tree(bt, node);
+    free(node);
+
+    return pair;
 }
 
 void *binary_tree_get(BinaryTree *bt, void *key){

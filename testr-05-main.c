@@ -1,4 +1,4 @@
-// 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
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -67,16 +67,24 @@ int main()
         }
         else
         {
-            KeyValPair *pair;
+            if (!binary_tree_empty(bt))
+            {
+                KeyValPair *pair;
 
-            if (!strcmp(op, "MAX"))
-                pair = binary_tree_max(bt);
+                if (!strcmp(op, "POP_MAX"))
+                    pair = binary_tree_pop_max(bt);
+                else
+                    pair = binary_tree_pop_min(bt);
+
+                Person *p = pair->value;
+                printf("%s %d %.2f\n", p->name, p->idade, p->altura);
+
+                key_destroy_fn(pair->key);
+                val_destroy_fn(pair->value);
+                key_val_pair_destroy(pair);
+            }
             else
-                pair = binary_tree_min(bt);
-
-            Person *p = pair->value;
-            printf("%s %d %.2f\n", p->name, p->idade, p->altura);
-            key_val_pair_destroy(pair, key_destroy_fn, val_destroy_fn);
+                printf("ARVORE VAZIA\n");
         }
     }
 
