@@ -2,7 +2,8 @@
 #ifndef _BINARY_TREE_H_
 #define _BINARY_TREE_H_
 
-#include "vector.h"
+#include "stack.h"
+// #include "queue.h"
 
 typedef struct Node Node;
 typedef struct BinaryTree BinaryTree;

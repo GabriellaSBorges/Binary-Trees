@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "types.h"
 
-typedef void *data_type;
 typedef unsigned char bool;
 
 typedef struct
