@@ -305,7 +305,28 @@ Vector *binary_tree_postorder_traversal(BinaryTree *bt){
     return vector;
 }
 
-Vector *binary_tree_levelorder_traversal(BinaryTree *bt);
+Vector *binary_tree_levelorder_traversal(BinaryTree *bt){
+    Queue *queue = queue_construct();
+
+    Vector *vector = vector_construct();
+    Node *node = bt->root;
+    queue_push(queue, node);
+
+    while( !queue_empty(queue) ){
+        node = queue_pop(queue);
+
+        if( node->left )
+            queue_push(queue, node->left);
+        if( node->right )
+            queue_push(queue, node->right);
+
+        KeyValPair *pair = key_val_pair_construct(node->key, node->value);
+        vector_push_back(vector, pair);
+    }
+
+    queue_destroy(queue);
+    return vector;
+}
 
 Vector *binary_tree_inorder_traversal_recursive(BinaryTree *bt);
 Vector *binary_tree_preorder_traversal_recursive(BinaryTree *bt);

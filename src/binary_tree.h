@@ -3,7 +3,7 @@
 #define _BINARY_TREE_H_
 
 #include "stack.h"
-// #include "queue.h"
+#include "queue.h"
 
 typedef struct Node Node;
 typedef struct BinaryTree BinaryTree;
