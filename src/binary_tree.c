@@ -9,7 +9,6 @@ struct Node{
 };
 
 struct BinaryTree{
-    // int size;
     Node *root;
     CmpFn cmp_fn;
     KeyDestroyFn key_destroy_fn;
@@ -25,7 +24,7 @@ KeyValPair *key_val_pair_construct(void *key, void *val){
     return kvp;
 }
 
-void key_val_pair_destroy(KeyValPair *kvp){
+void key_val_pair_destroy(KeyValPair *kvp, KeyDestroyFn key_destroy_fn, ValDestroyFn val_destroy_fn){
     free(kvp);
 }
 
@@ -61,7 +60,6 @@ void node_destroy(Node *node, KeyDestroyFn key_destroy_fn, ValDestroyFn val_dest
 BinaryTree *binary_tree_construct(CmpFn cmp_fn, KeyDestroyFn key_destroy_fn, ValDestroyFn val_destroy_fn){
 
     BinaryTree *bt = (BinaryTree*) malloc( sizeof(BinaryTree) );
-    // bt->size = 0;
     bt->root = NULL;
     bt->cmp_fn = cmp_fn;
     bt->key_destroy_fn = key_destroy_fn;
@@ -146,11 +144,7 @@ KeyValPair *binary_tree_min(BinaryTree *bt){
     while( node->left )
         node = node->left;
     
-    KeyValPair *pair = (KeyValPair*) malloc( sizeof(KeyValPair) );
-    pair->key = node->key;
-    pair->value = node->value;
-
-    return pair;
+    return key_val_pair_construct( node->key, node->value );
 }
 
 KeyValPair *binary_tree_max(BinaryTree *bt){
@@ -159,11 +153,7 @@ KeyValPair *binary_tree_max(BinaryTree *bt){
     while( node->right )
         node = node->right;
     
-    KeyValPair *pair = (KeyValPair*) malloc( sizeof(KeyValPair) );
-    pair->key = node->key;
-    pair->value = node->value;
-
-    return pair;
+    return key_val_pair_construct( node->key, node->value );
 }
 
 void *binary_tree_get(BinaryTree *bt, void *key){

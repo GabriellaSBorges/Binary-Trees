@@ -33,7 +33,9 @@ typedef struct{
 // } BinaryTree;
 
 KeyValPair *key_val_pair_construct(void *key, void *val);
-void key_val_pair_destroy(KeyValPair *kvp);
+void key_val_pair_destroy(KeyValPair *kvp, KeyDestroyFn key_destroy_fn, ValDestroyFn val_destroy_fn);
+// void *pair_return_key(KeyValPair *kvp);
+// void *pair_return_val(KeyValPair *kvp);
 
 Node *node_construct(void *key, void *value, Node *left, Node *right, Node *parent);
 void node_destroy(Node *node, KeyDestroyFn key_destroy_fn, ValDestroyFn val_destroy_fn);
