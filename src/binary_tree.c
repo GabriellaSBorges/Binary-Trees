@@ -366,6 +366,20 @@ void preorder(Vector *vector, Node *node){
     preorder(vector, node->right);
 }
 
-Vector *binary_tree_postorder_traversal_recursive(BinaryTree *bt);
+Vector *binary_tree_postorder_traversal_recursive(BinaryTree *bt){
+    Vector *vector = vector_construct();
+    postorder(vector, bt->root);
 
-void postorder(Vector *vector, Node *node);
+    return vector;
+}
+
+void postorder(Vector *vector, Node *node){
+    if( !node )
+        return;
+    
+    postorder(vector, node->left);
+    postorder(vector, node->right);
+
+    KeyValPair *pair = key_val_pair_construct(node->key, node->value);
+    vector_push_back(vector, pair);
+}

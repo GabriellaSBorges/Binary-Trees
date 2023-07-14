@@ -1,5 +1,5 @@
 all:
-	gcc -Wall -g -o main testr-11-main.c src/*.c
+	gcc -Wall -g -o main testr-12-main.c src/*.c
 	
 val: 
 	valgrind --leak-check=full -s ./main
