@@ -50,6 +50,8 @@ Node *add_recursive(BinaryTree *bt, Node *node, Node *parent, data_type key, dat
 int binary_tree_empty(BinaryTree *bt);
 void binary_tree_remove(BinaryTree *bt, void *key);
 void change_nodes_from_tree(BinaryTree *bt, Node *old);
+
+Node *tree_minimum(Node *node);
 void transplant(BinaryTree *bt, Node *old, Node *new);
 
 KeyValPair *binary_tree_min(BinaryTree *bt);

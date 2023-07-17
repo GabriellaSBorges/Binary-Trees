@@ -115,19 +115,25 @@ void change_nodes_from_tree(BinaryTree *bt, Node *node){
         transplant(bt, node, node->left);
 
     else{
-        Node *new = node->right;
+        Node *new = tree_minimum(node->right);
 
-        if( new->parent == node ){
-            transplant(bt, node, new);
-            new->left = node->left;
-            new->left->parent = new;
-
-        } else {
+        if( new->parent != node ) {
             transplant(bt, new, new->right);
             new->right = node->right;
             new->right->parent = new;
         }
+
+        transplant(bt, node, new);
+        new->left = node->left;
+        new->left->parent = new;
     }
+}
+
+Node *tree_minimum(Node *node){
+    while( node->left )
+        node = node->left;
+    
+    return node;
 }
 
 void transplant(BinaryTree *bt, Node *old, Node *new){
